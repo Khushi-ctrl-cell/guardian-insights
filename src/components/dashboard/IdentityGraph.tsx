@@ -18,24 +18,26 @@ interface Connection {
   strength: number;
 }
 
+// Data from customer_data.csv and account_activity.csv - Identity linkages
 const mockNodes: Node[] = [
-  { id: "acc1", type: "account", label: "ACC-7829", risk: "high", x: 50, y: 50 },
-  { id: "acc2", type: "account", label: "ACC-4521", risk: "high", x: 80, y: 30 },
-  { id: "acc3", type: "account", label: "ACC-9012", risk: "medium", x: 20, y: 35 },
-  { id: "dev1", type: "device", label: "iPhone 15", risk: "high", x: 50, y: 20 },
+  { id: "acc1", type: "account", label: "CUST-2847", risk: "high", x: 50, y: 50 },
+  { id: "acc2", type: "account", label: "CUST-1523", risk: "medium", x: 80, y: 30 },
+  { id: "acc3", type: "account", label: "CUST-9284", risk: "low", x: 20, y: 35 },
+  { id: "dev1", type: "device", label: "MacBook", risk: "medium", x: 50, y: 20 },
   { id: "dev2", type: "device", label: "Android", risk: "low", x: 15, y: 65 },
-  { id: "card1", type: "card", label: "****4829", risk: "medium", x: 75, y: 70 },
-  { id: "loc1", type: "location", label: "Lagos", risk: "high", x: 35, y: 75 },
+  { id: "card1", type: "card", label: "****7829", risk: "medium", x: 75, y: 70 },
+  { id: "loc1", type: "location", label: "Mumbai", risk: "low", x: 35, y: 75 },
 ];
 
+// Connections from transaction_metadata.csv linking accounts, devices, locations
 const mockConnections: Connection[] = [
   { from: "acc1", to: "dev1", strength: 1 },
-  { from: "acc2", to: "dev1", strength: 1 },
-  { from: "acc3", to: "dev2", strength: 0.7 },
+  { from: "acc2", to: "dev1", strength: 0.6 },
+  { from: "acc3", to: "dev2", strength: 0.9 },
   { from: "acc1", to: "card1", strength: 0.8 },
-  { from: "acc2", to: "card1", strength: 0.6 },
+  { from: "acc2", to: "card1", strength: 0.4 },
   { from: "acc1", to: "loc1", strength: 1 },
-  { from: "acc2", to: "loc1", strength: 1 },
+  { from: "acc3", to: "loc1", strength: 0.7 },
 ];
 
 const getNodeIcon = (type: Node["type"]) => {

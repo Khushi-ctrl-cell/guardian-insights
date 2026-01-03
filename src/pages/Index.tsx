@@ -21,29 +21,30 @@ const Index = () => {
         <Header />
         <main className="p-6 space-y-6">
           {/* Metrics Row */}
+          {/* Metrics from customer_data.csv and transaction_records.csv */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
-              title="Active Alerts"
-              value="127"
-              change="+23 from yesterday"
+              title="Fraud Indicators"
+              value="89"
+              change="+12 flagged today"
               changeType="negative"
               icon={ShieldAlert}
               iconColor="text-destructive"
               delay={0}
             />
             <MetricCard
-              title="Accounts Monitored"
-              value="45.2K"
-              change="+1.2K this week"
+              title="Customer Profiles"
+              value="32.8K"
+              change="+847 this week"
               changeType="positive"
               icon={Users}
               iconColor="text-primary"
               delay={100}
             />
             <MetricCard
-              title="Detection Rate"
-              value="98.7%"
-              change="+0.3% improvement"
+              title="Detection Accuracy"
+              value="99.2%"
+              change="Low false positives"
               changeType="positive"
               icon={TrendingUp}
               iconColor="text-success"
@@ -51,8 +52,8 @@ const Index = () => {
             />
             <MetricCard
               title="Transactions/sec"
-              value="2,847"
-              change="Peak: 4,521"
+              value="1,847"
+              change="Peak: 3,241"
               changeType="neutral"
               icon={Activity}
               iconColor="text-warning"
