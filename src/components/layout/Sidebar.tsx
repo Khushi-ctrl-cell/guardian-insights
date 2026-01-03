@@ -76,15 +76,15 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* User */}
+      {/* User - Aman Verma */}
       <div className="p-4 border-t border-sidebar-border">
         <button className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm font-bold text-primary-foreground">
-            JD
+            AV
           </div>
           <div className="flex-1 text-left">
-            <p className="text-sm font-medium">John Doe</p>
-            <p className="text-xs text-muted-foreground">Fraud Analyst</p>
+            <p className="text-sm font-medium">Aman Verma</p>
+            <p className="text-xs text-muted-foreground">Software Engineer</p>
           </div>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </button>

@@ -20,53 +20,55 @@ interface TimelineEvent {
   metadata?: string;
 }
 
+// Customer Journey Map - Aman Verma's Activity
 const mockEvents: TimelineEvent[] = [
   {
     id: "1",
     type: "alert",
-    description: "Synthetic identity pattern detected",
+    description: "Suspicious activity flagged - Detection stage",
     timestamp: "14:32:15",
     status: "danger",
-    metadata: "ACC-7829",
+    metadata: "CUST-2847",
   },
   {
     id: "2",
     type: "transaction",
-    description: "High-value transfer initiated",
+    description: "High-value payment initiated - Usage stage",
     timestamp: "14:30:42",
     status: "warning",
-    metadata: "$12,500",
+    metadata: "₹45,000",
   },
   {
     id: "3",
-    type: "login",
-    description: "New device login attempt",
+    type: "verification",
+    description: "User verified transaction - Resolution stage",
     timestamp: "14:28:19",
-    status: "warning",
-    metadata: "Lagos, NG",
+    status: "success",
+    metadata: "Approved",
   },
   {
     id: "4",
-    type: "verification",
-    description: "MFA challenge completed",
+    type: "login",
+    description: "Secure login from registered device",
     timestamp: "14:25:03",
     status: "success",
+    metadata: "Mumbai, IN",
   },
   {
     id: "5",
     type: "device",
-    description: "Device fingerprint registered",
+    description: "Smartphone registered - Onboarding stage",
     timestamp: "14:22:47",
     status: "neutral",
-    metadata: "iPhone 15 Pro",
+    metadata: "Android 14",
   },
   {
     id: "6",
     type: "transaction",
-    description: "Payment processed successfully",
+    description: "Regular payment completed - Trust stage",
     timestamp: "14:18:33",
     status: "success",
-    metadata: "$250.00",
+    metadata: "₹2,499",
   },
 ];
 
