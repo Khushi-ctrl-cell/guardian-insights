@@ -39,95 +39,102 @@ import { useToast } from "@/hooks/use-toast";
 interface Account {
   id: string;
   name: string;
-  type: "customer" | "merchant";
+  type: "applicant" | "merchant";
   status: "active" | "flagged" | "suspended";
   riskScore: number;
   accountAge: string;
   devices: string[];
   paymentMethods: string[];
   location: string;
-  recentTransactions: number;
+  loanAmount: number;
+  fpdProbability: number;
   failedAttempts: number;
 }
 
 const accountsData: Account[] = [
   {
-    id: "USR-7823",
-    name: "Ravi Kumar",
-    type: "customer",
+    id: "APP-7823",
+    name: "Vikram Mehta",
+    type: "applicant",
     status: "flagged",
-    riskScore: 72,
-    accountAge: "2 years",
-    devices: ["iPhone 14 Pro", "MacBook Pro"],
-    paymentMethods: ["HDFC Debit ****4521", "UPI - ravi@oksbi"],
+    riskScore: 87,
+    accountAge: "New applicant",
+    devices: ["Chrome/Android", "Rooted Device"],
+    paymentMethods: ["HDFC Savings ****4521"],
     location: "Mumbai, IN",
-    recentTransactions: 45,
-    failedAttempts: 3,
+    loanAmount: 250000,
+    fpdProbability: 0.87,
+    failedAttempts: 0,
   },
   {
-    id: "USR-4521",
-    name: "Priya Sharma",
-    type: "customer",
+    id: "APP-4521",
+    name: "Anjali Gupta",
+    type: "applicant",
     status: "active",
     riskScore: 25,
-    accountAge: "3 years",
+    accountAge: "Returning borrower",
     devices: ["Samsung Galaxy S23"],
-    paymentMethods: ["ICICI Credit ****8923", "UPI - priya@ybl"],
+    paymentMethods: ["ICICI Savings ****8923", "UPI - anjali@ybl"],
     location: "Delhi, IN",
-    recentTransactions: 128,
+    loanAmount: 80000,
+    fpdProbability: 0.12,
     failedAttempts: 0,
   },
   {
     id: "MRC-9182",
-    name: "TechMart Electronics",
+    name: "LendFast Finance",
     type: "merchant",
     status: "active",
     riskScore: 15,
-    accountAge: "5 years",
-    devices: ["POS Terminal x3"],
+    accountAge: "Partner since 2024",
+    devices: ["API Integration"],
     paymentMethods: ["Bank Account ****7892"],
     location: "Bangalore, IN",
-    recentTransactions: 2340,
-    failedAttempts: 12,
+    loanAmount: 0,
+    fpdProbability: 0,
+    failedAttempts: 0,
   },
   {
-    id: "USR-3847",
+    id: "APP-3847",
     name: "Amit Patel",
-    type: "customer",
+    type: "applicant",
     status: "suspended",
     riskScore: 91,
-    accountAge: "6 months",
-    devices: ["Unknown Device", "OnePlus 11"],
-    paymentMethods: ["SBI Debit ****3421"],
+    accountAge: "New applicant",
+    devices: ["Unknown Device", "VPN detected"],
+    paymentMethods: ["SBI Savings ****3421"],
     location: "Chennai, IN",
-    recentTransactions: 8,
-    failedAttempts: 15,
+    loanAmount: 450000,
+    fpdProbability: 0.91,
+    failedAttempts: 3,
   },
   {
     id: "MRC-6712",
-    name: "QuickPay Services",
+    name: "QuickCash Lending",
     type: "merchant",
     status: "flagged",
     riskScore: 68,
-    accountAge: "1 year",
+    accountAge: "Partner since 2025",
     devices: ["API Integration"],
     paymentMethods: ["Axis Bank ****5612"],
     location: "Hyderabad, IN",
-    recentTransactions: 890,
-    failedAttempts: 45,
+    loanAmount: 0,
+    fpdProbability: 0,
+    failedAttempts: 0,
   },
   {
-    id: "USR-2938",
+    id: "APP-2938",
     name: "Sneha Reddy",
-    type: "customer",
+    type: "applicant",
     status: "active",
     riskScore: 12,
-    accountAge: "4 years",
+    accountAge: "Returning borrower",
     devices: ["Pixel 8", "iPad Pro"],
-    paymentMethods: ["Kotak Credit ****1234", "UPI - sneha@paytm"],
+    paymentMethods: ["Kotak Savings ****1234", "UPI - sneha@paytm"],
     location: "Pune, IN",
-    recentTransactions: 210,
-    failedAttempts: 1,
+    loanAmount: 150000,
+    fpdProbability: 0.08,
+    failedAttempts: 0,
   },
 ];
 
@@ -163,7 +170,7 @@ export default function Accounts() {
     setDialogOpen(false);
   };
 
-  const customers = accountsData.filter((a) => a.type === "customer");
+  const customers = accountsData.filter((a) => a.type === "applicant");
   const merchants = accountsData.filter((a) => a.type === "merchant");
 
   return (
@@ -189,7 +196,7 @@ export default function Accounts() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Customers</p>
+                    <p className="text-sm text-muted-foreground">Applicants</p>
                     <p className="text-3xl font-bold">{customers.length}</p>
                   </div>
                   <Users className="h-8 w-8 text-info" />
@@ -226,7 +233,7 @@ export default function Accounts() {
           <Tabs defaultValue="all" className="space-y-4">
             <TabsList>
               <TabsTrigger value="all">All Accounts</TabsTrigger>
-              <TabsTrigger value="customers">Customers</TabsTrigger>
+              <TabsTrigger value="customers">Applicants</TabsTrigger>
               <TabsTrigger value="merchants">Merchants</TabsTrigger>
               <TabsTrigger value="flagged">Flagged</TabsTrigger>
             </TabsList>
@@ -337,13 +344,13 @@ export default function Accounts() {
 
                   <div className="grid grid-cols-2 gap-4 p-3 bg-muted/50 rounded-lg">
                     <div>
-                      <p className="text-sm text-muted-foreground">Recent Transactions</p>
-                      <p className="text-xl font-bold">{selectedAccount.recentTransactions}</p>
+                      <p className="text-sm text-muted-foreground">Loan Amount</p>
+                      <p className="text-xl font-bold">₹{selectedAccount.loanAmount.toLocaleString()}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Failed Attempts</p>
-                      <p className={`text-xl font-bold ${selectedAccount.failedAttempts > 5 ? "text-critical" : ""}`}>
-                        {selectedAccount.failedAttempts}
+                      <p className="text-sm text-muted-foreground">FPD Probability</p>
+                      <p className={`text-xl font-bold ${selectedAccount.fpdProbability > 0.5 ? "text-critical" : selectedAccount.fpdProbability > 0.3 ? "text-warning" : "text-success"}`}>
+                        {(selectedAccount.fpdProbability * 100).toFixed(0)}%
                       </p>
                     </div>
                   </div>
@@ -432,7 +439,7 @@ function AccountTable({
                 <TableCell className="font-medium">{account.name}</TableCell>
                 <TableCell>
                   <Badge variant={account.type === "merchant" ? "outline" : "secondary"}>
-                    {account.type === "merchant" ? "Merchant" : "Customer"}
+                    {account.type === "merchant" ? "Merchant" : "Applicant"}
                   </Badge>
                 </TableCell>
                 <TableCell>{getStatusBadge(account.status)}</TableCell>

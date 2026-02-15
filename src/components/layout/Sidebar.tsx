@@ -41,8 +41,8 @@ export function Sidebar() {
             <Shield className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="font-bold text-lg">FraudShield</h1>
-            <p className="text-xs text-muted-foreground">Detection Platform</p>
+            <h1 className="font-bold text-lg">Guardian Insights</h1>
+            <p className="text-xs text-muted-foreground">FPD Intelligence Engine</p>
           </div>
         </div>
       </div>
