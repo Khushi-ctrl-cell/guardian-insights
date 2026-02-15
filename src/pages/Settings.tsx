@@ -49,10 +49,10 @@ interface User {
 }
 
 const users: User[] = [
-  { id: "1", name: "Aman Verma", email: "aman@fraudshield.com", role: "admin", lastActive: "Now" },
-  { id: "2", name: "Priya Singh", email: "priya@fraudshield.com", role: "analyst", lastActive: "2 hours ago" },
-  { id: "3", name: "Rahul Gupta", email: "rahul@fraudshield.com", role: "analyst", lastActive: "1 day ago" },
-  { id: "4", name: "Sneha Patel", email: "sneha@fraudshield.com", role: "viewer", lastActive: "3 hours ago" },
+  { id: "1", name: "Aman Verma", email: "aman@guardianinsights.com", role: "admin", lastActive: "Now" },
+  { id: "2", name: "Priya Singh", email: "priya@guardianinsights.com", role: "analyst", lastActive: "2 hours ago" },
+  { id: "3", name: "Rahul Gupta", email: "rahul@guardianinsights.com", role: "analyst", lastActive: "1 day ago" },
+  { id: "4", name: "Sneha Patel", email: "sneha@guardianinsights.com", role: "viewer", lastActive: "3 hours ago" },
 ];
 
 const integrations = [
