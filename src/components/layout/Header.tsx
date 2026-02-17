@@ -123,9 +123,9 @@ export function Header() {
     <header className="sticky top-0 z-40 h-16 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="flex items-center justify-between h-full px-6">
         <div>
-          <h2 className="text-xl font-semibold">Fraud Detection Dashboard</h2>
+          <h2 className="text-xl font-semibold">FPD Intelligence Dashboard</h2>
           <p className="text-sm text-muted-foreground">
-            Real-time monitoring and threat analysis
+            Capital Risk Optimization Before Disbursement
           </p>
         </div>
 
