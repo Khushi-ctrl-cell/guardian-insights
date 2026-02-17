@@ -8,6 +8,13 @@ import { RiskGrowthSimulator } from "@/components/dashboard/RiskGrowthSimulator"
 import { PortfolioMetrics } from "@/components/dashboard/PortfolioMetrics";
 import { IdentityGraph } from "@/components/dashboard/IdentityGraph";
 import { TransactionTable } from "@/components/dashboard/TransactionTable";
+import { BorrowerDNA } from "@/components/dashboard/BorrowerDNA";
+import { GeoRiskHeatmap } from "@/components/dashboard/GeoRiskHeatmap";
+import { WhatIfSimulator } from "@/components/dashboard/WhatIfSimulator";
+import { ModelPerformance } from "@/components/dashboard/ModelPerformance";
+import { LiveScenarioMode } from "@/components/dashboard/LiveScenarioMode";
+import { FPDEarlyWarning } from "@/components/dashboard/FPDEarlyWarning";
+import { DNAPortfolioInsights } from "@/components/dashboard/DNAPortfolioInsights";
 import {
   ShieldAlert,
   TrendingDown,
@@ -24,42 +31,16 @@ const Index = () => {
         <main className="p-6 space-y-6">
           {/* Metrics Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MetricCard
-              title="FPD Rate"
-              value="6.2%"
-              change="-1.8% vs last month"
-              changeType="positive"
-              icon={TrendingDown}
-              iconColor="text-success"
-              delay={0}
-            />
-            <MetricCard
-              title="Capital at Risk"
-              value="₹18.4L"
-              change="5 high-risk applications"
-              changeType="negative"
-              icon={IndianRupee}
-              iconColor="text-warning"
-              delay={100}
-            />
-            <MetricCard
-              title="Detection Accuracy"
-              value="94.7%"
-              change="Low false positives"
-              changeType="positive"
-              icon={TrendingUp}
-              iconColor="text-primary"
-              delay={200}
-            />
-            <MetricCard
-              title="Active Alerts"
-              value="23"
-              change="8 critical today"
-              changeType="negative"
-              icon={ShieldAlert}
-              iconColor="text-destructive"
-              delay={300}
-            />
+            <MetricCard title="FPD Rate" value="6.2%" change="-1.8% vs last month" changeType="positive" icon={TrendingDown} iconColor="text-success" delay={0} />
+            <MetricCard title="Capital at Risk" value="₹18.4L" change="5 high-risk applications" changeType="negative" icon={IndianRupee} iconColor="text-warning" delay={100} />
+            <MetricCard title="Detection Accuracy" value="94.7%" change="Low false positives" changeType="positive" icon={TrendingUp} iconColor="text-primary" delay={200} />
+            <MetricCard title="Active Alerts" value="23" change="8 critical today" changeType="negative" icon={ShieldAlert} iconColor="text-destructive" delay={300} />
+          </div>
+
+          {/* Live Scenario + FPD Early Warning */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <LiveScenarioMode />
+            <FPDEarlyWarning />
           </div>
 
           {/* Capital at Risk + Explainable Risk */}
@@ -68,8 +49,23 @@ const Index = () => {
             <ExplainableRisk />
           </div>
 
+          {/* Borrower DNA + What-If Simulator */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <BorrowerDNA />
+            <div className="space-y-6">
+              <WhatIfSimulator />
+              <ModelPerformance />
+            </div>
+          </div>
+
           {/* Portfolio Metrics */}
           <PortfolioMetrics />
+
+          {/* DNA Portfolio Insights + Geo Heatmap */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <DNAPortfolioInsights />
+            <GeoRiskHeatmap />
+          </div>
 
           {/* Simulator + Alert Feed */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

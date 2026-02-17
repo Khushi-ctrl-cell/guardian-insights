@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Slider } from "@/components/ui/slider";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -118,6 +119,67 @@ const pricingTiers = [
     popular: false,
   },
 ];
+
+function ROICalculator() {
+  const [monthlyApps, setMonthlyApps] = useState([100000]);
+  const [avgLoanAmt, setAvgLoanAmt] = useState([45000]);
+  const [currentFPD, setCurrentFPD] = useState([8]);
+
+  const fpdReduction = 0.54; // 54% reduction
+  const monthlySaved = monthlyApps[0] * (currentFPD[0] / 100) * fpdReduction * avgLoanAmt[0] * 0.01;
+  const annualSaved = monthlySaved * 12;
+  const roi = ((annualSaved - 1200000) / 1200000) * 100; // assuming Growth plan cost
+
+  return (
+    <section className="py-20 px-6 bg-card/30">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold mb-2">ROI Calculator</h2>
+          <p className="text-muted-foreground">See how much capital you can protect with Guardian Insights.</p>
+        </div>
+        <Card variant="glass" className="p-6 space-y-6">
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Monthly Applications</span>
+                <span className="font-mono font-bold text-primary">{(monthlyApps[0] / 1000).toFixed(0)}K</span>
+              </div>
+              <Slider value={monthlyApps} onValueChange={setMonthlyApps} min={10000} max={500000} step={10000} />
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Avg Loan Amount</span>
+                <span className="font-mono font-bold text-primary">₹{avgLoanAmt[0].toLocaleString()}</span>
+              </div>
+              <Slider value={avgLoanAmt} onValueChange={setAvgLoanAmt} min={10000} max={200000} step={5000} />
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Current FPD Rate</span>
+                <span className="font-mono font-bold text-primary">{currentFPD[0]}%</span>
+              </div>
+              <Slider value={currentFPD} onValueChange={setCurrentFPD} min={2} max={15} step={0.5} />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="p-4 rounded-lg bg-success/10 border border-success/20 text-center">
+              <p className="text-xs text-muted-foreground mb-1">Annual Capital Protected</p>
+              <p className="text-2xl font-bold font-mono text-success">₹{(annualSaved / 10000000).toFixed(1)}Cr</p>
+            </div>
+            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 text-center">
+              <p className="text-xs text-muted-foreground mb-1">ROI</p>
+              <p className="text-2xl font-bold font-mono text-primary">{Math.max(0, roi).toFixed(0)}%</p>
+            </div>
+            <div className="p-4 rounded-lg bg-warning/10 border border-warning/20 text-center">
+              <p className="text-xs text-muted-foreground mb-1">New FPD Rate</p>
+              <p className="text-2xl font-bold font-mono text-warning">{(currentFPD[0] * (1 - fpdReduction)).toFixed(1)}%</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </section>
+  );
+}
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -357,6 +419,9 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ROI Calculator */}
+      <ROICalculator />
+
       {/* CTA */}
       <section className="py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
@@ -364,10 +429,15 @@ export default function Landing() {
           <p className="text-muted-foreground mb-8">
             Join leading digital lenders who protect their portfolio with Guardian Insights.
           </p>
-          <Button size="lg" onClick={() => navigate("/auth")} className="gap-2 text-base px-8">
-            Start Your Free Trial
-            <ArrowRight className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center justify-center gap-4">
+            <Button size="lg" onClick={() => navigate("/auth")} className="gap-2 text-base px-8">
+              Start Your Free Trial
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate("/auth")} className="gap-2 text-base px-8">
+              Book Demo
+            </Button>
+          </div>
         </div>
       </section>
 

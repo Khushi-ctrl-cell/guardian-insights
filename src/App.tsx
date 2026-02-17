@@ -11,6 +11,11 @@ import Accounts from "./pages/Accounts";
 import IdentityGraphPage from "./pages/IdentityGraphPage";
 import RulesEngine from "./pages/RulesEngine";
 import Settings from "./pages/Settings";
+import ApiDocs from "./pages/ApiDocs";
+import Compliance from "./pages/Compliance";
+import CaseStudy from "./pages/CaseStudy";
+import Architecture from "./pages/Architecture";
+import TrustCenter from "./pages/TrustCenter";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,7 +35,11 @@ const App = () => (
           <Route path="/identity-graph" element={<IdentityGraphPage />} />
           <Route path="/rules-engine" element={<RulesEngine />} />
           <Route path="/settings" element={<Settings />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/api-docs" element={<ApiDocs />} />
+          <Route path="/compliance" element={<Compliance />} />
+          <Route path="/case-study" element={<CaseStudy />} />
+          <Route path="/architecture" element={<Architecture />} />
+          <Route path="/trust-center" element={<TrustCenter />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

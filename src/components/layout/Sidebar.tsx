@@ -9,6 +9,11 @@ import {
   Settings,
   Search,
   ChevronDown,
+  Code,
+  Scale,
+  FileText,
+  Server,
+  Eye,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -25,6 +30,11 @@ const navItems: NavItem[] = [
   { icon: Users, label: "Accounts", path: "/accounts" },
   { icon: Network, label: "Identity Graph", path: "/identity-graph" },
   { icon: Shield, label: "Rules Engine", path: "/rules-engine" },
+  { icon: Scale, label: "Compliance", path: "/compliance" },
+  { icon: Code, label: "API Docs", path: "/api-docs" },
+  { icon: FileText, label: "Case Study", path: "/case-study" },
+  { icon: Server, label: "Architecture", path: "/architecture" },
+  { icon: Eye, label: "Trust Center", path: "/trust-center" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
 
@@ -57,7 +67,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-2 space-y-1">
+      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
@@ -65,13 +75,13 @@ export function Sidebar() {
               key={item.label}
               onClick={() => navigate(item.path)}
               className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all",
                 isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
               )}
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className="h-4 w-4" />
               <span>{item.label}</span>
               {item.badge && (
                 <Badge variant="destructive" className="ml-auto text-xs px-1.5">
@@ -83,7 +93,7 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* User - Aman Verma */}
+      {/* User */}
       <div className="p-4 border-t border-sidebar-border">
         <button className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-accent transition-colors">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm font-bold text-primary-foreground">
@@ -91,7 +101,7 @@ export function Sidebar() {
           </div>
           <div className="flex-1 text-left">
             <p className="text-sm font-medium">Aman Verma</p>
-            <p className="text-xs text-muted-foreground">Software Engineer</p>
+            <p className="text-xs text-muted-foreground">Admin</p>
           </div>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </button>
