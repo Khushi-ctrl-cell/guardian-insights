@@ -97,7 +97,7 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="ml-64">
+      <div className="lg:ml-64">
         <Header />
         <main className="p-6">
           <Tabs defaultValue="security" className="space-y-6">

@@ -46,7 +46,7 @@ export default function Architecture() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="ml-64">
+      <div className="lg:ml-64">
         <Header />
         <main className="p-6 space-y-6">
           <div>
