@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { MetricCard } from "@/components/dashboard/MetricCard";
@@ -23,18 +24,33 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [tick, setTick] = useState(0);
+
+  // Auto-refresh metrics every 5 seconds with slight jitter
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fpdRate = (6.0 + Math.sin(tick * 0.3) * 0.4).toFixed(1);
+  const capitalAtRisk = (18.0 + Math.cos(tick * 0.2) * 1.5).toFixed(1);
+  const accuracy = (94.5 + Math.sin(tick * 0.15) * 0.5).toFixed(1);
+  const activeAlerts = 20 + Math.floor(Math.sin(tick * 0.4) * 5);
+
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="ml-64">
+      <div className="lg:ml-64">
         <Header />
-        <main className="p-6 space-y-6">
+        <main className="p-4 lg:p-6 space-y-6">
           {/* Metrics Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <MetricCard title="FPD Rate" value="6.2%" change="-1.8% vs last month" changeType="positive" icon={TrendingDown} iconColor="text-success" delay={0} />
-            <MetricCard title="Capital at Risk" value="₹18.4L" change="5 high-risk applications" changeType="negative" icon={IndianRupee} iconColor="text-warning" delay={100} />
-            <MetricCard title="Detection Accuracy" value="94.7%" change="Low false positives" changeType="positive" icon={TrendingUp} iconColor="text-primary" delay={200} />
-            <MetricCard title="Active Alerts" value="23" change="8 critical today" changeType="negative" icon={ShieldAlert} iconColor="text-destructive" delay={300} />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <MetricCard title="FPD Rate" value={`${fpdRate}%`} change="-1.8% vs last month" changeType="positive" icon={TrendingDown} iconColor="text-success" delay={0} />
+            <MetricCard title="Capital at Risk" value={`₹${capitalAtRisk}L`} change={`${Math.max(3, activeAlerts - 15)} high-risk applications`} changeType="negative" icon={IndianRupee} iconColor="text-warning" delay={100} />
+            <MetricCard title="Detection Accuracy" value={`${accuracy}%`} change="Low false positives" changeType="positive" icon={TrendingUp} iconColor="text-primary" delay={200} />
+            <MetricCard title="Active Alerts" value={`${activeAlerts}`} change={`${Math.max(5, Math.floor(activeAlerts * 0.35))} critical today`} changeType="negative" icon={ShieldAlert} iconColor="text-destructive" delay={300} />
           </div>
 
           {/* Live Scenario + FPD Early Warning */}

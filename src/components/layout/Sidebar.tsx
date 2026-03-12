@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -14,6 +15,8 @@ import {
   FileText,
   Server,
   Eye,
+  Menu,
+  X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -41,9 +44,10 @@ const navItems: NavItem[] = [
 export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col z-50">
+  const sidebarContent = (
+    <>
       {/* Logo */}
       <div className="p-6 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
@@ -62,7 +66,7 @@ export function Sidebar() {
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-sidebar-accent text-muted-foreground">
           <Search className="h-4 w-4" />
           <span className="text-sm">Search...</span>
-          <kbd className="ml-auto text-xs bg-background/50 px-1.5 py-0.5 rounded">⌘K</kbd>
+          <kbd className="ml-auto text-xs bg-background/50 px-1.5 py-0.5 rounded hidden sm:inline">⌘K</kbd>
         </div>
       </div>
 
@@ -73,7 +77,10 @@ export function Sidebar() {
           return (
             <button
               key={item.label}
-              onClick={() => navigate(item.path)}
+              onClick={() => {
+                navigate(item.path);
+                setMobileOpen(false);
+              }}
               className={cn(
                 "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all",
                 isActive
@@ -106,6 +113,47 @@ export function Sidebar() {
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </button>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile hamburger */}
+      <button
+        onClick={() => setMobileOpen(true)}
+        className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-sidebar border border-sidebar-border lg:hidden"
+      >
+        <Menu className="h-5 w-5 text-sidebar-foreground" />
+      </button>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-[55] lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Mobile sidebar */}
+      <aside
+        className={cn(
+          "fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col z-[60] transition-transform lg:hidden",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="absolute top-4 right-4 p-1 rounded text-sidebar-foreground/70 hover:text-sidebar-foreground"
+        >
+          <X className="h-5 w-5" />
+        </button>
+        {sidebarContent}
+      </aside>
+
+      {/* Desktop sidebar */}
+      <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex-col z-50 hidden lg:flex">
+        {sidebarContent}
+      </aside>
+    </>
   );
 }

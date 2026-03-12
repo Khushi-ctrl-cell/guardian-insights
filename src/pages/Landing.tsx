@@ -443,16 +443,17 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-8 px-6">
-        <div className="max-w-6xl mx-auto flex items-center justify-between text-sm text-muted-foreground">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Shield className="h-4 w-4 text-primary" />
             <span>Guardian Insights © 2026</span>
           </div>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
-            <a href="#" className="hover:text-foreground transition-colors">Terms</a>
-            <a href="#" className="hover:text-foreground transition-colors">Status</a>
-            <a href="#" className="hover:text-foreground transition-colors">API Docs</a>
+          <div className="flex flex-wrap justify-center gap-6">
+            <span className="hover:text-foreground transition-colors cursor-pointer" onClick={() => navigate("/privacy")}>Privacy</span>
+            <span className="hover:text-foreground transition-colors cursor-pointer" onClick={() => navigate("/terms")}>Terms</span>
+            <span className="hover:text-foreground transition-colors cursor-pointer" onClick={() => navigate("/status")}>Status</span>
+            <span className="hover:text-foreground transition-colors cursor-pointer" onClick={() => navigate("/blog")}>Blog</span>
+            <span className="hover:text-foreground transition-colors cursor-pointer" onClick={() => navigate("/api-docs")}>API Docs</span>
           </div>
         </div>
       </footer>
