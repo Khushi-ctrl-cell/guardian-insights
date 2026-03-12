@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Bell, Filter, RefreshCw, X, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,47 +20,19 @@ interface Notification {
   type: "critical" | "high" | "medium" | "info";
 }
 
-const notifications: Notification[] = [
-  {
-    id: "1",
-    title: "Critical Alert",
-    message: "Synthetic identity pattern detected in USR-7823",
-    time: "2 mins ago",
-    read: false,
-    type: "critical",
-  },
-  {
-    id: "2",
-    title: "High Risk Transaction",
-    message: "Transaction of ₹1,25,000 flagged for review",
-    time: "5 mins ago",
-    read: false,
-    type: "high",
-  },
-  {
-    id: "3",
-    title: "New Device Login",
-    message: "Aman Verma logged in from a new device",
-    time: "15 mins ago",
-    read: false,
-    type: "medium",
-  },
-  {
-    id: "4",
-    title: "Rule Triggered",
-    message: "Velocity check rule triggered 5 times",
-    time: "1 hour ago",
-    read: true,
-    type: "info",
-  },
-  {
-    id: "5",
-    title: "Account Flagged",
-    message: "QuickPay Services marked for review",
-    time: "2 hours ago",
-    read: true,
-    type: "high",
-  },
+const initialNotifications: Notification[] = [
+  { id: "1", title: "Critical Alert", message: "Synthetic identity pattern detected in APP-7823", time: "2 mins ago", read: false, type: "critical" },
+  { id: "2", title: "High Risk Transaction", message: "Loan of ₹4,50,000 flagged — FPD probability 91%", time: "5 mins ago", read: false, type: "high" },
+  { id: "3", title: "FPD Warning", message: "FPD rising in Karnataka — income volatility spike", time: "8 mins ago", read: false, type: "critical" },
+  { id: "4", title: "Rule Triggered", message: "Velocity check rule triggered 5 times", time: "1 hour ago", read: true, type: "info" },
+  { id: "5", title: "Account Flagged", message: "Vikram Mehta — DNA score 82, CPS™ 91", time: "2 hours ago", read: true, type: "high" },
+];
+
+const streamingNotifications: Notification[] = [
+  { id: "s1", title: "New Application", message: "APP-8842 — ₹2.2L personal loan from Jaipur", time: "Just now", read: false, type: "medium" },
+  { id: "s2", title: "Loan Stacking Alert", message: "Same PAN detected across 3 platforms in 48hrs", time: "Just now", read: false, type: "critical" },
+  { id: "s3", title: "Device Anomaly", message: "Rooted device + VPN detected — APP-9103", time: "Just now", read: false, type: "high" },
+  { id: "s4", title: "Model Drift Alert", message: "Transaction distribution shifted 12% in ap-south-1", time: "Just now", read: false, type: "medium" },
 ];
 
 const getTypeColor = (type: string) => {
@@ -77,10 +49,10 @@ export function Header() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [notifs, setNotifs] = useState(notifications);
+  const [notifs, setNotifs] = useState(initialNotifications);
+  const [streamIndex, setStreamIndex] = useState(0);
   const { toast } = useToast();
 
-  // Filter state
   const [filters, setFilters] = useState({
     critical: true,
     high: true,
@@ -90,31 +62,45 @@ export function Header() {
     thisWeek: false,
   });
 
-  const handleRefresh = () => {
+  // Real-time streaming notifications every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStreamIndex((prev) => {
+        const next = prev % streamingNotifications.length;
+        const newNotif = {
+          ...streamingNotifications[next],
+          id: `stream-${Date.now()}`,
+          time: "Just now",
+        };
+        setNotifs((current) => [newNotif, ...current].slice(0, 20));
+        return prev + 1;
+      });
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
     setTimeout(() => {
       setIsRefreshing(false);
-      toast({
-        title: "Data Refreshed",
-        description: "All dashboard data has been updated.",
-      });
+      toast({ title: "Data Refreshed", description: "All dashboard data has been updated." });
     }, 1000);
-  };
+  }, [toast]);
+
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(handleRefresh, 30000);
+    return () => clearInterval(interval);
+  }, [handleRefresh]);
 
   const handleApplyFilters = () => {
     setFilterOpen(false);
-    toast({
-      title: "Filters Applied",
-      description: "Dashboard data filtered successfully.",
-    });
+    toast({ title: "Filters Applied", description: "Dashboard data filtered successfully." });
   };
 
   const markAllRead = () => {
     setNotifs(notifs.map((n) => ({ ...n, read: true })));
-    toast({
-      title: "Notifications",
-      description: "All notifications marked as read.",
-    });
+    toast({ title: "Notifications", description: "All notifications marked as read." });
   };
 
   const unreadCount = notifs.filter((n) => !n.read).length;
@@ -122,18 +108,16 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 h-16 border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="flex items-center justify-between h-full px-6">
-        <div>
+        <div className="pl-10 lg:pl-0">
           <h2 className="text-xl font-semibold">FPD Intelligence Dashboard</h2>
-          <p className="text-sm text-muted-foreground">
-            Capital Risk Optimization Before Disbursement
-          </p>
+          <p className="text-sm text-muted-foreground">Capital Risk Optimization Before Disbursement</p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Filters Popover */}
           <Popover open={filterOpen} onOpenChange={setFilterOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hidden sm:flex">
                 <Filter className="h-4 w-4" />
                 Filters
               </Button>
@@ -151,16 +135,8 @@ export function Header() {
                   <div className="space-y-2">
                     {["critical", "high", "medium", "low"].map((level) => (
                       <div key={level} className="flex items-center gap-2">
-                        <Checkbox
-                          id={level}
-                          checked={filters[level as keyof typeof filters] as boolean}
-                          onCheckedChange={(checked) =>
-                            setFilters({ ...filters, [level]: checked })
-                          }
-                        />
-                        <Label htmlFor={level} className="text-sm capitalize">
-                          {level}
-                        </Label>
+                        <Checkbox id={level} checked={filters[level as keyof typeof filters] as boolean} onCheckedChange={(checked) => setFilters({ ...filters, [level]: checked })} />
+                        <Label htmlFor={level} className="text-sm capitalize">{level}</Label>
                       </div>
                     ))}
                   </div>
@@ -169,23 +145,11 @@ export function Header() {
                   <p className="text-sm font-medium text-muted-foreground">Time Range</p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <Checkbox
-                        id="today"
-                        checked={filters.today}
-                        onCheckedChange={(checked) =>
-                          setFilters({ ...filters, today: !!checked, thisWeek: false })
-                        }
-                      />
+                      <Checkbox id="today" checked={filters.today} onCheckedChange={(checked) => setFilters({ ...filters, today: !!checked, thisWeek: false })} />
                       <Label htmlFor="today" className="text-sm">Today</Label>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Checkbox
-                        id="thisWeek"
-                        checked={filters.thisWeek}
-                        onCheckedChange={(checked) =>
-                          setFilters({ ...filters, thisWeek: !!checked, today: false })
-                        }
-                      />
+                      <Checkbox id="thisWeek" checked={filters.thisWeek} onCheckedChange={(checked) => setFilters({ ...filters, thisWeek: !!checked, today: false })} />
                       <Label htmlFor="thisWeek" className="text-sm">This Week</Label>
                     </div>
                   </div>
@@ -199,15 +163,9 @@ export function Header() {
           </Popover>
 
           {/* Refresh Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            className="gap-2"
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-          >
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleRefresh} disabled={isRefreshing}>
             <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
-            {isRefreshing ? "Refreshing..." : "Refresh"}
+            <span className="hidden sm:inline">{isRefreshing ? "Refreshing..." : "Refresh"}</span>
           </Button>
 
           {/* Notifications Popover */}
@@ -218,8 +176,8 @@ export function Header() {
                   <Bell className="h-4 w-4" />
                 </Button>
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full text-[10px] font-bold flex items-center justify-center text-destructive-foreground">
-                    {unreadCount}
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive rounded-full text-[10px] font-bold flex items-center justify-center text-destructive-foreground animate-pulse">
+                    {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
               </div>
@@ -227,18 +185,11 @@ export function Header() {
             <PopoverContent className="w-80 p-0" align="end">
               <div className="p-3 border-b border-border flex items-center justify-between">
                 <h4 className="font-medium">Notifications</h4>
-                <Button variant="ghost" size="sm" className="text-xs" onClick={markAllRead}>
-                  Mark all read
-                </Button>
+                <Button variant="ghost" size="sm" className="text-xs" onClick={markAllRead}>Mark all read</Button>
               </div>
               <div className="max-h-80 overflow-y-auto">
                 {notifs.map((notif) => (
-                  <div
-                    key={notif.id}
-                    className={`p-3 border-b border-border/50 hover:bg-muted/50 transition-colors ${
-                      !notif.read ? "bg-muted/30" : ""
-                    }`}
-                  >
+                  <div key={notif.id} className={`p-3 border-b border-border/50 hover:bg-muted/50 transition-colors ${!notif.read ? "bg-muted/30" : ""}`}>
                     <div className="flex items-start gap-2">
                       <div className={`w-2 h-2 rounded-full mt-1.5 ${getTypeColor(notif.type)}`} />
                       <div className="flex-1 min-w-0">
@@ -246,22 +197,18 @@ export function Header() {
                         <p className="text-xs text-muted-foreground truncate">{notif.message}</p>
                         <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
                       </div>
-                      {!notif.read && (
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                      )}
+                      {!notif.read && <div className="w-2 h-2 rounded-full bg-primary" />}
                     </div>
                   </div>
                 ))}
               </div>
               <div className="p-2 border-t border-border">
-                <Button variant="ghost" className="w-full text-sm" onClick={() => setNotifOpen(false)}>
-                  View all notifications
-                </Button>
+                <Button variant="ghost" className="w-full text-sm" onClick={() => setNotifOpen(false)}>View all notifications</Button>
               </div>
             </PopoverContent>
           </Popover>
 
-          <div className="flex items-center gap-2 pl-3 border-l border-border">
+          <div className="items-center gap-2 pl-3 border-l border-border hidden sm:flex">
             <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
             <span className="text-sm text-muted-foreground">Live</span>
           </div>

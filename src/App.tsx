@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
+import ResetPassword from "./pages/ResetPassword";
 import Alerts from "./pages/Alerts";
 import Accounts from "./pages/Accounts";
 import IdentityGraphPage from "./pages/IdentityGraphPage";
@@ -16,6 +17,10 @@ import Compliance from "./pages/Compliance";
 import CaseStudy from "./pages/CaseStudy";
 import Architecture from "./pages/Architecture";
 import TrustCenter from "./pages/TrustCenter";
+import Blog from "./pages/Blog";
+import Status from "./pages/Status";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +35,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/identity-graph" element={<IdentityGraphPage />} />
@@ -40,6 +46,10 @@ const App = () => (
           <Route path="/case-study" element={<CaseStudy />} />
           <Route path="/architecture" element={<Architecture />} />
           <Route path="/trust-center" element={<TrustCenter />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/status" element={<Status />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
